@@ -10,6 +10,8 @@ import {
 import CallHome from '../screen/CallHome'
 import Appointment from '../screen/Appointment'
 import CallModal from '../screen/CallModal'
+import Account from '../screen/Account';
+import Community from '../screen/Community'
 import {color} from '../styles/styles'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
@@ -44,7 +46,7 @@ const AppBottomTap = () => {
         <Tab.Navigator screenOptions={({ route }) => ({
             tabBarActiveTintColor: color.PrimaryColor,
             tabBarInactiveTintColor: color.GrayColor,
-            headerShown: false,
+            headerShown: true,
             tabBarShowLabel: false,
             tabBarStyle: {
               backgroundColor: '#F4F4F4',
@@ -72,7 +74,7 @@ const AppBottomTap = () => {
             />
             <Tab.Screen
               name="Community"
-              component={CallHome}
+              component={Community}
               options={{
                 tabBarIcon: ({focused}) => (
                   <View style={styles.tabIcon}>
@@ -107,6 +109,13 @@ const AppBottomTap = () => {
                   <CustomTabBarButton {...props} />
                 ),
               }}
+              listeners={({ navigation, route }) => ({
+                tabPress: (e) => {
+                  e.preventDefault();
+            
+                  navigation.navigate('CallModal');
+                },
+              })}
             />
             <Tab.Screen
               name="Appointment"
@@ -124,12 +133,12 @@ const AppBottomTap = () => {
                     </Text>
                   </View>
                 ),
-                tabBarBadge: 3,
+                // tabBarBadge: 3,
               }}
             />
             <Tab.Screen
               name="Account"
-              component={Appointment}
+              component={Account}
               options={{ 
                 tabBarIcon: ({focused}) => (
                   <View style={styles.tabIcon}>

@@ -2,18 +2,10 @@ import React, { useEffect, useState } from 'react'
 import { Text, View, StyleSheet, Image, TouchableOpacity, FlatList } from 'react-native'
 import {color} from '../styles/styles'
 import DaySelection from '../components/DaySelection';
+import Api from '../util/Api'
 
 export default function CallBooking({route, navigation}) {
     const {doctorId} = route.params 
-
-    const doctorData = {
-        id: 1, 
-        name: 'Bác sĩ Mua', 
-        starAveraged: 4.9, 
-        starNum: 411, 
-        img: "https://zpsocial-f42-org.zadn.vn/89418b993275de2b8764.jpg",
-        online: true,
-    }
 
     const hoursSelections = [
         { id: 1, hour: '8:00 SA'},
@@ -27,11 +19,12 @@ export default function CallBooking({route, navigation}) {
         { id: 9, hour: '5:00 PM'},
     ]
 
-    const [doctor, setDoctor] = useState(doctorData)
+    const [doctor, setDoctor] = useState({})
 
-    // useEffect(() => {
-    //     setDoctor(doctorData)
-    // }, [doctorData])
+    useEffect( async () => {
+        const doctorData = await Api.get(`/doctors/detail/${doctorId}`)
+        setDoctor(doctorData.data)
+    }, [doctorId])
 
     return (
         <View style={styles.container}>
@@ -81,7 +74,7 @@ export default function CallBooking({route, navigation}) {
                         Đặt lịch tư vấn
                     </Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => navigation.push("CallScreen")} style={{ marginLeft: 8}}>
+                <TouchableOpacity onPress={() => navigation.navigate("CallScreen", {doctorId: doctor._id})} style={{ marginLeft: 8}}>
                     <Image style={styles.phoneImg} source={require('../assets/phone.png')} />
                 </TouchableOpacity>
             </View>

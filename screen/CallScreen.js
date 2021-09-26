@@ -6,7 +6,8 @@ import {
     Text, 
     TouchableOpacity, 
     Image,
-    View
+    View,
+    StatusBar
 } from 'react-native'
 import LottieView from 'lottie-react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -23,6 +24,7 @@ import {
 } from 'react-native-webrtc';
 import io from 'socket.io-client'
 import {stun_turn_config} from '../config/webrtc-config'
+import Api from '../util/Api';
 
 const dimensions = Dimensions.get('window')
 
@@ -36,15 +38,7 @@ export default class CallScreen extends React.Component {
         isConnectPeer: true,
         camera: true,
         mic: true,
-      }
- 
-      this.doctor = {
-        id: 1, 
-        name: 'Bác sĩ Mua', 
-        starAveraged: 4.9, 
-        starNum: 411, 
-        img: "https://zpsocial-f42-org.zadn.vn/89418b993275de2b8764.jpg",
-        online: true,
+        doctor: {}
       }
 
       this.stream = null
@@ -52,7 +46,16 @@ export default class CallScreen extends React.Component {
       this.socket = null
     }
   
-    componentDidMount = () => {
+    componentDidMount = async () => {
+      try {
+        const doctor = await Api.get(`/doctors/detail/${this.props.route.params.doctorId}`)
+        this.setState({
+          ...this.state,
+          doctor: doctor.data
+        })
+      } catch (error) {
+        console.log("error: ", error);
+      }
   
       this.socket = io.connect(
         'https://calldoctorwebrtc.herokuapp.com/webrtcPeer',
@@ -86,7 +89,7 @@ export default class CallScreen extends React.Component {
       this.socket.on('stopCall', (data) => {
         console.log("Hủy kết nối");
         this.pc.close()
-        this.props.navigation.goBack()
+        // this.props.navigation.goBack()
       })
   
       this.pc = new RTCPeerConnection(stun_turn_config)
@@ -211,7 +214,8 @@ export default class CallScreen extends React.Component {
             localStream, 
             remoteStream, 
             isConnectPeer,
-            camera
+            camera,
+            doctor
         } = this.state
 
         const remoteVideo = remoteStream ? 
@@ -229,6 +233,7 @@ export default class CallScreen extends React.Component {
         )
         return (
             <View style={styles.container}>
+                <StatusBar backgroundColor={color.PrimaryColor} barStyle="light-content"/>
                 {isConnectPeer ?
                 <View style={styles.userInfo}>
                     <LottieView 
@@ -237,8 +242,8 @@ export default class CallScreen extends React.Component {
                         autoPlay
                         loop
                     />
-                    <Image style={styles.avatar} source={{uri: this.doctor.img}}/>
-                    <Text style={styles.name}>{this.doctor.name}</Text>
+                    <Image style={styles.avatar} source={{uri: doctor.img}}/>
+                    <Text style={styles.name}>{doctor.name}</Text>
                     <Text style={styles.status}>Đang đổ chuông</Text>
                 </View>
                 :

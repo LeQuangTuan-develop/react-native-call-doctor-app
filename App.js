@@ -2,14 +2,12 @@ import 'react-native-gesture-handler';
 import React, { useEffect, useReducer, useMemo } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {color} from './styles/styles'
 import {AuthContext} from './context/Authcontext'
 import LottieView from 'lottie-react-native';
 import { 
   View, 
-  StyleSheet, 
-  Image, 
-  ActivityIndicator
+  StyleSheet,
+  StatusBar,  
 } from 'react-native'
 import { CallStackScreen } from './navigation/AppStackNavigator'
 import RootStackScreen from './navigation/RootStackScreen'
@@ -66,6 +64,7 @@ function App() {
     return (
       <View style={{flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: 'white'}}>
         {/* <ActivityIndicator size="large" color={color.PrimaryColor}/> */}
+        <StatusBar backgroundColor="white" barStyle="dark-content"/>
         <LottieView 
           source={require('./assets/animations/24867-online-doctor-app.json')}
           size={30} 

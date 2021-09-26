@@ -5,10 +5,10 @@ import {color} from '../styles/styles'
 export default function CategoryItem({category, onPressBtn}) {
     return (
         <TouchableOpacity activeOpacity={0.3} onPress={onPressBtn}>
-            <View style={{...styles.categoryBox, backgroundColor: category.color}}>
+            <View style={{...styles.categoryBox, backgroundColor: color[category.color]}}>
                 <Image style={styles.image} source={{uri: category.image}} />
             </View>
-            <Text style={styles.name}>{category.categoryName}</Text>
+            <Text style={styles.name}>{category.categoryname}</Text>
         </TouchableOpacity>
     )
 }

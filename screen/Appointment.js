@@ -1,17 +1,20 @@
-import React, { useContext } from 'react'
-import {View, Text, TouchableOpacity} from 'react-native'
+import React, { useEffect } from 'react'
+import {View, Text, Button} from 'react-native'
 
-import {AuthContext} from '../context/Authcontext'
-
-export default function Appointment() {
-
-    const {signOut} = useContext(AuthContext)
+export default function Appointment({ navigation }) {
+    useEffect(() => {
+        navigation.setOptions({
+            title: "Lịch hẹn",
+        })
+    }, [navigation])
 
     return (
-        <TouchableOpacity onPress={signOut} style={{flex: 1}} >
-            <View style={{alignItems: 'center', marginTop: 10}}>
-                <Text>Lịch Hẹn</Text>
-            </View>
-        </TouchableOpacity>
-    )
-}
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <Text style={{ fontSize: 24, marginBottom: 10 }}>Bạn chưa có lịch hẹn nào!</Text>
+        <Button
+          onPress={() => navigation.navigate('Home')}
+          title="Đặt lịch ngay"
+        />
+      </View>
+    );
+  }
